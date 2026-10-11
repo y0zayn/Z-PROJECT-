@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝑍 𝑃𝑅𝑂𝐽𝐸𝐶𝑇 — PERSONAL DEVELOPER WORKSPACE</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            height: 4px;
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262626;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-black text-white flex items-center justify-center p-2 sm:p-4">
+
+    <!-- STARTUP SPLASH SCREEN (ONLY THE Z LOGO) -->
+    <div id="startup-screen" class="fixed inset-0 bg-black z-50 flex items-center justify-center transition-opacity duration-500">
+        <h1 class="text-6xl sm:text-7xl md:text-8xl font-bold tracking-tight italic text-white uppercase select-none animate-pulse" style="font-style: italic;">𝑍</h1>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div id="app-container" class="w-full max-w-[440px] sm:max-w-[480px] md:max-w-[520px] bg-black border border-[#222222] rounded-[32px] px-4 py-3 sm:px-6 sm:py-3.5 flex flex-col justify-between shadow-2xl relative min-h-[460px] opacity-0 transition-opacity duration-500">
+        
+        <!-- HEADER SECTION -->
+        <header class="w-full">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl sm:text-[26px] font-bold tracking-tight italic text-white uppercase" style="font-style: italic;">𝑍 𝑃𝑅𝑂𝐽𝐸𝐶𝑇</h1>
+                    <p class="text-[11px] sm:text-xs text-[#8e8e93] font-medium tracking-wide mt-0.5 uppercase">PERSONAL DEVELOPER WORKSPACE</p>
+                </div>
+                <!-- Settings Gear Button -->
+                <button id="settings-btn" class="w-10 h-10 rounded-xl bg-[#111111] hover:bg-[#1f1f1f] border border-[#262626] flex items-center justify-center text-[#d1d5db] transition-all cursor-pointer" title="Settings">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </button>
+            </div>
+            <!-- Divider Line -->
+            <div class="w-full h-[1px] bg-[#222222] my-2"></div>
+        </header>
+
+        <!-- MAIN VIEW: PROJECTS WORKSPACE -->
+        <main id="projects-view" class="flex-1 flex flex-col justify-between">
+            <div>
+                <!-- Projects Header & Slot Counter -->
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="text-xs sm:text-sm font-bold tracking-wider text-white uppercase">MY PROJECTS</h2>
+                    <span id="slot-counter" class="text-xs font-semibold text-[#8e8e93] tracking-wider">00 / 03 SLOTS</span>
+                </div>
+
+                <!-- 3 Project Slots Container (Horizontal Row) -->
+                <div id="projects-grid" class="grid grid-cols-3 gap-2 overflow-x-auto pb-1">
+                    <!-- Cards injected dynamically -->
+                </div>
+            </div>
+
+            <!-- Custom Center Tagline Banner -->
+            <div class="my-1.5 text-center px-2">
+                <h3 class="text-base sm:text-lg font-bold tracking-wider text-white uppercase">100 IDEAS 3 SLOTS</h3>
+            </div>
+
+            <!-- Toast / Status Message Area -->
+            <div id="toast-message" class="hidden my-1 px-3 py-1.5 bg-[#1a1a1a] border border-[#333] text-xs rounded-xl text-center text-gray-300 transition-all duration-300"></div>
+        </main>
+
+        <!-- SETTINGS VIEW (Initially Hidden) -->
+        <section id="settings-view" class="flex-1 flex flex-col hidden">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-sm font-bold tracking-wider text-white uppercase">WORKSPACE SETTINGS</h2>
+                <button id="back-to-projects" class="text-xs text-[#a1a1aa] hover:text-white flex items-center gap-1 font-medium bg-[#111] px-3 py-1.5 rounded-lg border border-[#262626] transition-colors">
+                    ← Back
+                </button>
+            </div>
+
+            <div class="space-y-2.5 my-auto">
+                <div class="p-3 rounded-2xl bg-[#0a0a0a] border border-[#222]">
+                    <h3 class="text-xs font-bold text-gray-200 uppercase mb-1">Data Backup & Restore</h3>
+                    <p class="text-[11px] text-[#8e8e93] mb-2.5">Export your project workspace data to a JSON file or restore from a previous backup.</p>
+                    <div class="flex gap-2">
+                        <button id="export-btn" class="flex-1 py-1.5 px-3 bg-[#161616] hover:bg-[#222] text-white text-xs font-semibold rounded-xl border border-[#333] transition-all">Export JSON</button>
+                        <label class="flex-1 py-1.5 px-3 bg-[#161616] hover:bg-[#222] text-white text-xs font-semibold rounded-xl border border-[#333] text-center cursor-pointer transition-all">
+                            Import JSON
+                            <input type="file" id="import-file" accept=".json" class="hidden">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-2xl bg-[#0a0a0a] border border-[#222]">
+                    <h3 class="text-xs font-bold text-red-400 uppercase mb-1">Reset Workspace</h3>
+                    <p class="text-[11px] text-[#8e8e93] mb-2.5">Permanently delete all custom projects and reset slots back to empty defaults.</p>
+                    <button id="reset-btn" class="w-full py-1.5 px-3 bg-red-950/30 hover:bg-red-900/40 text-red-400 text-xs font-semibold rounded-xl border border-red-900/50 transition-all">Reset All Data</button>
+                </div>
+
+                <!-- Dedicated Developer Section -->
+                <div class="p-3 rounded-2xl bg-[#0a0a0a] border border-[#222] flex flex-col gap-0.5">
+                    <span class="text-[11px] font-bold text-[#8e8e93] uppercase tracking-wider">DEVELOPER</span>
+                    <span class="text-xs font-bold text-white tracking-wider">sAm</span>
+                </div>
+
+                <div class="p-2 rounded-2xl bg-[#0a0a0a] border border-[#222] text-center">
+                    <p class="text-[10px] text-[#71717a]">𝑍 𝑃𝑅𝑂𝐽𝐸𝐶𝑇 v1.0 • Client-side local storage engine</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER SECTION -->
+        <footer class="w-full mt-1">
+            <div class="w-full h-[1px] bg-[#222222] mb-1.5"></div>
+            <div class="text-center py-0.5">
+                <span class="text-[11px] font-bold tracking-tight italic text-[#8e8e93] uppercase" style="font-style: italic;">𝑃𝐸𝑅𝑆𝑂𝑁𝐴𝐿 𝐷𝐸𝑉𝐸𝐿𝑂𝑃𝐸𝑅 𝑊𝑂𝑅𝐾𝑆𝑃𝐴𝐶𝐸©</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- MODAL CONTAINER FOR ADD / EDIT PROJECT -->
+    <div id="project-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-[#0e0e0e] border border-[#262626] rounded-[24px] w-full max-w-md p-4 sm:p-5 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-3">
+                <h3 id="modal-title" class="text-sm font-bold tracking-wider text-white uppercase">ADD NEW PROJECT</h3>
+                <button id="modal-close" class="text-gray-400 hover:text-white p-1 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <form id="project-form" class="space-y-3">
+                <input type="hidden" id="edit-slot-index" value="">
+                
+                <div>
+                    <label class="block text-[11px] font-semibold text-[#a1a1aa] uppercase mb-1">Project Name *</label>
+                    <input type="text" id="p-name" required placeholder="e.g. Z Arcade" class="w-full bg-[#141414] border border-[#2a2a2a] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-white transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-[#a1a1aa] uppercase mb-1">Project URL (http:// or https://) *</label>
+                    <input type="url" id="p-url" required placeholder="https://example.com" class="w-full bg-[#141414] border border-[#2a2a2a] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-white transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-[#a1a1aa] uppercase mb-1">Short Description (Optional)</label>
+                    <input type="text" id="p-desc" placeholder="Brief summary..." class="w-full bg-[#141414] border border-[#2a2a2a] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-white transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-[#a1a1aa] uppercase mb-1">Logo / Thumbnail Image URL (Optional)</label>
+                    <input type="url" id="p-image-url" placeholder="https://example.com/logo.png" class="w-full bg-[#141414] border border-[#2a2a2a] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-white transition-colors">
+                </div>
+
+                <!-- Monochrome Icon Grid Selector -->
+                <div>
+                    <label class="block text-[11px] font-semibold text-[#a1a1aa] uppercase mb-1.5">Select Icon Symbol (If no image URL)</label>
+                    <div id="icon-grid" class="grid grid-cols-5 gap-2">
+                        <div data-icon="code" class="icon-option flex flex-col items-center justify-center p-2 rounded-xl bg-[#141414] border border-[#2a2a2a] hover:border-gray-400 cursor-pointer transition-all">
+                            <svg class="w-5 h-5 text-gray-200" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 18l6-6-6-6M8 6l-6 6 6 6"></path></svg>
+                            <span class="text-[9px] text-gray-400 mt-1">Code</span>
+                        </div>
+                        <div data-icon="stack" class="icon-option flex flex-col items-center justify-center p-2 rounded-xl bg-[#141414] border border-[#2a2a2a] hover:border-gray-400 cursor-pointer transition-all">
+                            <svg class="w-5 h-5 text-gray-200" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                            <span class="text-[9px] text-gray-400 mt-1">Stack</span>
+                        </div>
+                        <div data-icon="terminal" class="icon-option flex flex-col items-center justify-center p-2 rounded-xl bg-[#141414] border border-[#2a2a2a] hover:border-gray-400 cursor-pointer transition-all">
+                            <span class="text-xs font-mono font-bold text-gray-200">$ _</span>
+                            <span class="text-[9px] text-gray-400 mt-1">Terminal</span>
+                        </div>
+                        <div data-icon="globe" class="icon-option flex flex-col items-center justify-center p-2 rounded-xl bg-[#141414] border border-[#2a2a2a] hover:border-gray-400 cursor-pointer transition-all">
+                            <svg class="w-5 h-5 text-gray-200" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path stroke-linecap="round" stroke-linejoin="round" d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path></svg>
+                            <span class="text-[9px] text-gray-400 mt-1">Globe</span>
+                        </div>
+                        <div data-icon="custom" class="icon-option flex flex-col items-center justify-center p-2 rounded-xl bg-[#141414] border border-[#2a2a2a] hover:border-gray-400 cursor-pointer transition-all">
+                            <span class="text-sm">⚡</span>
+                            <span class="text-[9px] text-gray-400 mt-1">Emoji</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="p-icon-type" value="code">
+                    <input type="text" id="p-custom-emoji" placeholder="Enter custom emoji like 🚀" class="w-full bg-[#141414] border border-[#2a2a2a] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-white transition-colors mt-2 hidden">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- Custom Status Dropdown -->
+                    <div class="relative">
+                        <label class="block text-[11px] font-semibold text-[#a1a1aa] uppercase mb-1">Status</label>
+                        <div id="status-dropdown-trigger" class="w-full bg-[#141414] border border-[#2a2a2a] rounded-xl px-3.5 py-2 text-xs text-white flex items-center justify-between cursor-pointer hover:border-gray-400 transition-colors">
+                            <span id="status-selected-label">LIVE</span>
+                            <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                        <input type="hidden" id="p-status" value="LIVE">
+                        
+                        <!-- Compact Custom Status Menu -->
+                        <div id="status-dropdown-menu" class="absolute left-0 right-0 bottom-full mb-1 bg-[#0e0e0e] border border-[#262626] rounded-xl shadow-2xl z-20 hidden overflow-hidden">
+                            <div class="status-option px-3 py-2 text-xs text-white hover:bg-[#161616] cursor-pointer flex items-center justify-between border-b border-[#1a1a1a] transition-colors" data-value="LIVE">
+                                <span class="font-medium tracking-wide">LIVE</span>
+                                <span class="w-3.5 h-3.5 rounded-full border border-gray-500 flex items-center justify-center radio-circle"></span>
+                            </div>
+                            <div class="status-option px-3 py-2 text-xs text-white hover:bg-[#161616] cursor-pointer flex items-center justify-between border-b border-[#1a1a1a] transition-colors" data-value="IN PROGRESS">
+                                <span class="font-medium tracking-wide">IN PROGRESS</span>
+                                <span class="w-3.5 h-3.5 rounded-full border border-gray-500 flex items-center justify-center radio-circle"></span>
+                            </div>
+                            <div class="status-option px-3 py-2 text-xs text-white hover:bg-[#161616] cursor-pointer flex items-center justify-between border-b border-[#1a1a1a] transition-colors" data-value="PAUSED">
+                                <span class="font-medium tracking-wide">PAUSED</span>
+                                <span class="w-3.5 h-3.5 rounded-full border border-gray-500 flex items-center justify-center radio-circle"></span>
+                            </div>
+                            <div class="status-option px-3 py-2 text-xs text-white hover:bg-[#161616] cursor-pointer flex items-center justify-between transition-colors" data-value="ARCHIVED">
+                                <span class="font-medium tracking-wide">ARCHIVED</span>
+                                <span class="w-3.5 h-3.5 rounded-full border border-gray-500 flex items-center justify-center radio-circle"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Version Number Input -->
+                    <div>
+                        <label class="block text-[11px] font-semibold text-[#a1a1aa] uppercase mb-1">Version Number</label>
+                        <input type="text" id="p-version" placeholder="v1.0" class="w-full bg-[#141414] border border-[#2a2a2a] rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-white transition-colors">
+                    </div>
+                </div>
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" id="modal-cancel" class="flex-1 py-2 px-4 bg-[#1a1a1a] hover:bg-[#222] text-gray-300 font-semibold text-xs rounded-xl border border-[#333] transition-colors">Cancel</button>
+                    <button type="submit" class="flex-1 py-2 px-4 bg-white hover:bg-gray-200 text-black font-semibold text-xs rounded-xl transition-colors">Save Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CONFIRMATION DIALOG MODAL -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-[#0e0e0e] border border-[#262626] rounded-[24px] w-full max-w-sm p-4 sm:p-5 shadow-2xl text-center">
+            <h3 id="confirm-title" class="text-sm font-bold text-white uppercase mb-1.5">Confirm Action</h3>
+            <p id="confirm-text" class="text-xs text-[#a1a1aa] mb-4">Are you sure you want to proceed?</p>
+            <div class="flex gap-2">
+                <button id="confirm-no" class="flex-1 py-2 px-4 bg-[#161616] hover:bg-[#222] text-gray-300 text-xs font-semibold rounded-xl border border-[#333]">Cancel</button>
+                <button id="confirm-yes" class="flex-1 py-2 px-4 bg-white hover:bg-gray-200 text-black text-xs font-semibold rounded-xl">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const EMPTY_PROJECTS = [null, null, null];
+
+        let projects = [];
+        let confirmCallback = null;
+
+        // DOM Elements
+        const startupScreen = document.getElementById('startup-screen');
+        const appContainer = document.getElementById('app-container');
+        const projectsGrid = document.getElementById('projects-grid');
+        const slotCounter = document.getElementById('slot-counter');
+        const settingsBtn = document.getElementById('settings-btn');
+        const settingsView = document.getElementById('settings-view');
+        const projectsView = document.getElementById('projects-view');
+        const backToProjectsBtn = document.getElementById('back-to-projects');
+        const toastMessage = document.getElementById('toast-message');
+        
+        // Modal elements
+        const projectModal = document.getElementById('project-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalClose = document.getElementById('modal-close');
+        const modalCancel = document.getElementById('modal-cancel');
+        const projectForm = document.getElementById('project-form');
+        const editSlotIndex = document.getElementById('edit-slot-index');
+        const pName = document.getElementById('p-name');
+        const pUrl = document.getElementById('p-url');
+        const pDesc = document.getElementById('p-desc');
+        const pImageUrl = document.getElementById('p-image-url');
+        const pStatus = document.getElementById('p-status');
+        const pVersion = document.getElementById('p-version');
+        const pIconType = document.getElementById('p-icon-type');
+        const pCustomEmoji = document.getElementById('p-custom-emoji');
+        const iconOptions = document.querySelectorAll('.icon-option');
+
+        // Custom Status Dropdown elements
+        const statusTrigger = document.getElementById('status-dropdown-trigger');
+        const statusMenu = document.getElementById('status-dropdown-menu');
+        const statusSelectedLabel = document.getElementById('status-selected-label');
+        const statusOptions = document.querySelectorAll('.status-option');
+
+        // Confirm Modal elements
+        const confirmModal = document.getElementById('confirm-modal');
+        const confirmTitle = document.getElementById('confirm-title');
+        const confirmText = document.getElementById('confirm-text');
+        const confirmYes = document.getElementById('confirm-yes');
+        const confirmNo = document.getElementById('confirm-no');
+
+        // Settings actions
+        const exportBtn = document.getElementById('export-btn');
+        const importFile = document.getElementById('import-file');
+        const resetBtn = document.getElementById('reset-btn');
+
+        window.onload = function() {
+            loadProjects();
+            renderWorkspace();
+            setupEventListeners();
+
+            setTimeout(() => {
+                startupScreen.style.opacity = '0';
+                appContainer.style.opacity = '1';
+                setTimeout(() => {
+                    startupScreen.style.display = 'none';
+                }, 500);
+            }, 1000);
+        };
+
+        function loadProjects() {
+            try {
+                const stored = localStorage.getItem('z_project_slots');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed) && parsed.length === 3) {
+                        projects = parsed;
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.error("Error reading storage:", e);
+            }
+            projects = [...EMPTY_PROJECTS];
+            saveProjects();
+        }
+
+        function saveProjects() {
+            try {
+                localStorage.setItem('z_project_slots', JSON.stringify(projects));
+            } catch (e) {
+                showToast("Error: LocalStorage full or unavailable.", true);
+            }
+        }
+
+        function showToast(message, isError = false) {
+            toastMessage.textContent = message;
+            toastMessage.className = `my-1 px-3 py-1.5 text-xs rounded-xl text-center transition-all duration-300 block ${isError ? 'bg-red-950/60 border border-red-900 text-red-300' : 'bg-[#161616] border border-[#333] text-gray-300'}`;
+            setTimeout(() => {
+                toastMessage.classList.add('hidden');
+            }, 3500);
+        }
+
+        function renderWorkspace() {
+            projectsGrid.innerHTML = '';
+            let filledCount = 0;
+
+            projects.forEach((proj, index) => {
+                if (proj !== null) {
+                    filledCount++;
+                    const card = document.createElement('div');
+                    card.className = "bg-[#0d0d0d] border border-[#222222] hover:border-[#444] rounded-[20px] p-2 flex flex-col justify-between transition-all group relative";
+                    
+                    let thumbnailHtml = '';
+                    if (proj.imageUrl && proj.imageUrl.trim() !== '') {
+                        thumbnailHtml = `<img src="${escapeAttr(proj.imageUrl)}" alt="${escapeAttr(proj.name)}" class="w-full h-full object-cover rounded-xl" onerror="this.onerror=null; this.parentElement.innerHTML='${escapeAttr(getDefaultIconHtml(proj))}';">`;
+                    } else {
+                        thumbnailHtml = getDefaultIconHtml(proj);
+                    }
+
+                    card.innerHTML = `
+                        <div>
+                            <!-- Thumbnail Area -->
+                            <div class="w-full aspect-square bg-[#141414] rounded-xl flex items-center justify-center mb-2 relative group/thumb overflow-hidden border border-[#222]">
+                                ${thumbnailHtml}
+                                <!-- Quick Edit / Delete Overlay Buttons -->
+                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                    <button onclick="openEditModal(${index})" class="w-7 h-7 rounded-lg bg-[#222] hover:bg-white hover:text-black text-white flex items-center justify-center transition-colors" title="Edit Project">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    </button>
+                                    <button onclick="promptDelete(${index})" class="w-7 h-7 rounded-lg bg-red-950/80 hover:bg-red-600 text-red-200 hover:text-white flex items-center justify-center transition-colors" title="Delete Project">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Project Info -->
+                            <h3 class="text-xs sm:text-sm font-semibold text-white tracking-tight truncate px-0.5">${escapeHtml(proj.name)}</h3>
+                            ${proj.description ? `<p class="text-[10px] text-gray-400 truncate px-0.5 mt-0.5">${escapeHtml(proj.description)}</p>` : ''}
+                            <div class="flex items-center gap-1.5 mt-1 px-0.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                                <span class="text-[9px] sm:text-[10px] font-semibold text-gray-400 tracking-wider uppercase">${escapeHtml(proj.status)}</span>
+                            </div>
+                            <div class="text-[10px] text-[#71717a] mt-0.5 px-0.5 tracking-tight font-medium">
+                                ${proj.version ? escapeHtml(proj.version) + ' · ' : ''}${escapeHtml(proj.date)}
+                            </div>
+                        </div>
+
+                        <!-- OPEN Button -->
+                        <div class="mt-2">
+                            <button onclick="openProjectUrl('${escapeAttr(proj.url)}')" class="w-full py-1.5 bg-white hover:bg-gray-200 text-black text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1 shadow-sm active:scale-[0.98]">
+                                OPEN 
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    `;
+                    projectsGrid.appendChild(card);
+                } else {
+                    const emptyCard = document.createElement('div');
+                    emptyCard.className = "border border-dashed border-[#333333] hover:border-gray-400 rounded-[20px] p-2 flex flex-col items-center justify-center text-center cursor-pointer transition-all min-h-[170px] bg-[#050505] hover:bg-[#0a0a0a]";
+                    emptyCard.onclick = () => openAddModal(index);
+                    emptyCard.innerHTML = `
+                        <div class="w-8 h-8 rounded-full bg-[#141414] border border-[#262626] flex items-center justify-center mb-1.5 text-gray-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+                        </div>
+                        <span class="text-[11px] font-bold text-gray-200 uppercase tracking-wide">ADD PROJECT</span>
+                        <span class="text-[9px] text-[#666666] mt-0.5 uppercase tracking-wider">EMPTY SLOT</span>
+                    `;
+                    projectsGrid.appendChild(emptyCard);
+                }
+            });
+
+            slotCounter.textContent = `0${filledCount} / 03 SLOTS`;
+        }
+
+        function getDefaultIconHtml(proj) {
+            if (proj.iconType === 'stack') {
+                return '<svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path></svg>';
+            } else if (proj.iconType === 'terminal') {
+                return '<span class="text-lg font-mono font-bold text-gray-300">$ _</span>';
+            } else if (proj.iconType === 'globe') {
+                return '<svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path stroke-linecap="round" stroke-linejoin="round" d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path></svg>';
+            } else if (proj.iconType === 'custom' && proj.customEmoji) {
+                return `<span class="text-xl">${proj.customEmoji}</span>`;
+            }
+            return '<svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 18l6-6-6-6M8 6l-6 6 6 6"></path></svg>';
+        }
+
+        function selectIconOption(iconName) {
+            pIconType.value = iconName;
+            iconOptions.forEach(opt => {
+                if (opt.getAttribute('data-icon') === iconName) {
+                    opt.classList.add('border-white', 'bg-[#1f1f1f]');
+                    opt.classList.remove('border-[#2a2a2a]', 'bg-[#141414]');
+                } else {
+                    opt.classList.remove('border-white', 'bg-[#1f1f1f]');
+                    opt.classList.add('border-[#2a2a2a]', 'bg-[#141414]');
+                }
+            });
+            if (iconName === 'custom') {
+                pCustomEmoji.classList.remove('hidden');
+            } else {
+                pCustomEmoji.classList.add('hidden');
+            }
+        }
+
+        function setSelectedStatus(statusValue) {
+            pStatus.value = statusValue;
+            statusSelectedLabel.textContent = statusValue;
+            statusMenu.classList.add('hidden');
+
+            statusOptions.forEach(opt => {
+                const val = opt.getAttribute('data-value');
+                const circle = opt.querySelector('.radio-circle');
+                if (val === statusValue) {
+                    opt.classList.add('bg-[#161616]');
+                    circle.innerHTML = '<span class="w-2 h-2 rounded-full bg-white"></span>';
+                    circle.classList.remove('border-gray-500');
+                    circle.classList.add('border-white');
+                } else {
+                    opt.classList.remove('bg-[#161616]');
+                    circle.innerHTML = '';
+                    circle.classList.remove('border-white');
+                    circle.classList.add('border-gray-500');
+                }
+            });
+        }
+
+        function openAddModal(slotIdx) {
+            modalTitle.textContent = "ADD NEW PROJECT";
+            editSlotIndex.value = slotIdx;
+            pName.value = "";
+            pUrl.value = "";
+            pDesc.value = "";
+            pImageUrl.value = "";
+            setSelectedStatus("LIVE");
+            pVersion.value = "v1.0";
+            pCustomEmoji.value = "";
+            selectIconOption('code');
+            statusMenu.classList.add('hidden');
+            projectModal.classList.remove('hidden');
+        }
+
+        function openEditModal(slotIdx) {
+            const proj = projects[slotIdx];
+            if (!proj) return;
+            modalTitle.textContent = "EDIT PROJECT";
+            editSlotIndex.value = slotIdx;
+            pName.value = proj.name;
+            pUrl.value = proj.url;
+            pDesc.value = proj.description || "";
+            pImageUrl.value = proj.imageUrl || "";
+            setSelectedStatus(proj.status || "LIVE");
+            pVersion.value = proj.version || "";
+            selectIconOption(proj.iconType || "code");
+            if (proj.iconType === 'custom') {
+                pCustomEmoji.value = proj.customEmoji || "";
+            } else {
+                pCustomEmoji.value = "";
+            }
+            statusMenu.classList.add('hidden');
+            projectModal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            projectModal.classList.add('hidden');
+            statusMenu.classList.add('hidden');
+        }
+
+        function openProjectUrl(url) {
+            if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+                showToast("Error: Invalid or missing project URL.", true);
+                return;
+            }
+            try {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            } catch (e) {
+                showToast("Unable to open URL in a new tab.", true);
+            }
+        }
+
+        function promptDelete(slotIdx) {
+            confirmTitle.textContent = "DELETE PROJECT";
+            confirmText.textContent = `Are you sure you want to delete "${projects[slotIdx].name}" and free this slot?`;
+            confirmModal.classList.remove('hidden');
+            confirmCallback = () => {
+                projects[slotIdx] = null;
+                saveProjects();
+                renderWorkspace();
+                showToast("Project deleted successfully.");
+            };
+        }
+
+        function setupEventListeners() {
+            settingsBtn.onclick = () => {
+                projectsView.classList.add('hidden');
+                settingsView.classList.remove('hidden');
+            };
+
+            backToProjectsBtn.onclick = () => {
+                settingsView.classList.add('hidden');
+                projectsView.classList.remove('hidden');
+            };
+
+            modalClose.onclick = closeModal;
+            modalCancel.onclick = closeModal;
+            projectModal.onclick = (e) => {
+                if (e.target === projectModal) closeModal();
+            };
+
+            statusTrigger.onclick = (e) => {
+                e.stopPropagation();
+                statusMenu.classList.toggle('hidden');
+            };
+
+            statusOptions.forEach(opt => {
+                opt.onclick = (e) => {
+                    e.stopPropagation();
+                    const val = opt.getAttribute('data-value');
+                    setSelectedStatus(val);
+                };
+            });
+
+            projectModal.onclick = (e) => {
+                if (e.target === projectModal) {
+                    closeModal();
+                } else if (!statusTrigger.contains(e.target) && !statusMenu.contains(e.target)) {
+                    statusMenu.classList.add('hidden');
+                }
+            };
+
+            iconOptions.forEach(opt => {
+                opt.onclick = () => {
+                    const iconName = opt.getAttribute('data-icon');
+                    selectIconOption(iconName);
+                };
+            });
+
+            projectForm.onsubmit = (e) => {
+                e.preventDefault();
+                const name = pName.value.trim();
+                let url = pUrl.value.trim();
+                const description = pDesc.value.trim();
+                const imageUrl = pImageUrl.value.trim();
+                const status = pStatus.value;
+                const version = pVersion.value.trim();
+                const iconType = pIconType.value;
+                const customEmoji = pCustomEmoji.value.trim();
+                const slotIdx = parseInt(editSlotIndex.value);
+
+                if (!name || !url) {
+                    showToast("Please fill in required Name and URL fields.", true);
+                    return;
+                }
+
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    url = 'https://' + url;
+                }
+
+                const now = new Date();
+                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const dateStr = `${now.getDate()} ${months[now.getMonth()]}`;
+
+                let existingDate = dateStr;
+                if (projects[slotIdx] && projects[slotIdx].date) {
+                    existingDate = projects[slotIdx].date;
+                }
+
+                projects[slotIdx] = {
+                    name,
+                    url,
+                    description,
+                    imageUrl,
+                    status,
+                    version,
+                    date: existingDate,
+                    iconType,
+                    customEmoji
+                };
+
+                saveProjects();
+                renderWorkspace();
+                closeModal();
+                showToast("Project saved successfully.");
+            };
+
+            confirmNo.onclick = () => {
+                confirmModal.classList.add('hidden');
+                confirmCallback = null;
+            };
+
+            confirmYes.onclick = () => {
+                confirmModal.classList.add('hidden');
+                if (confirmCallback) {
+                    confirmCallback();
+                    confirmCallback = null;
+                }
+            };
+
+            confirmModal.onclick = (e) => {
+                if (e.target === confirmModal) {
+                    confirmModal.classList.add('hidden');
+                    confirmCallback = null;
+                }
+            };
+
+            exportBtn.onclick = () => {
+                try {
+                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projects, null, 2));
+                    const downloadAnchor = document.createElement('a');
+                    downloadAnchor.setAttribute("href", dataStr);
+                    downloadAnchor.setAttribute("download", `z_project_backup_${new Date().toISOString().slice(0,10)}.json`);
+                    document.body.appendChild(downloadAnchor);
+                    downloadAnchor.click();
+                    downloadAnchor.remove();
+                    showToast("Backup exported successfully.");
+                } catch (e) {
+                    showToast("Failed to export backup.", true);
+                }
+            };
+
+            importFile.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const imported = JSON.parse(event.target.result);
+                        if (Array.isArray(imported) && imported.length === 3) {
+                            projects = imported;
+                            saveProjects();
+                            renderWorkspace();
+                            settingsView.classList.add('hidden');
+                            projectsView.classList.remove('hidden');
+                            showToast("Backup imported successfully.");
+                        } else {
+                            showToast("Invalid backup structure (must have exactly 3 slots).", true);
+                        }
+                    } catch (err) {
+                        showToast("Invalid JSON file format.", true);
+                    }
+                    importFile.value = '';
+                };
+                reader.readAsText(file);
+            };
+
+            resetBtn.onclick = () => {
+                confirmTitle.textContent = "RESET WORKSPACE";
+                confirmText.textContent = "Are you sure you want to reset all projects back to 3 empty slots? This cannot be undone.";
+                confirmModal.classList.remove('hidden');
+                confirmCallback = () => {
+                    projects = [...EMPTY_PROJECTS];
+                    saveProjects();
+                    renderWorkspace();
+                    settingsView.classList.add('hidden');
+                    projectsView.classList.remove('hidden');
+                    showToast("Workspace reset to empty slots.");
+                };
+            };
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#039;');
+        }
+
+        function escapeAttr(str) {
+            if (!str) return '';
+            return str.replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>
